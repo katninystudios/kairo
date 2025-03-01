@@ -8,7 +8,7 @@
 </div>
 
 > [!NOTE]
-> This repo is for the desktop applications (Windows 10/11, macOS, Linux). For the Android repo, please see [PLATFORMS.md](/ANDROID.md).
+> This repo is for the desktop applications (Windows 10/11, macOS, Linux). For the Android repo, please see our [Android repo](https://github.com/katninystudios/kairo-android).
 
 # About
 Kairo is a browser created by Katniny Studios, an independent, privacy-first development studio.
