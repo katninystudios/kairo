@@ -19,6 +19,7 @@ Learn more at https://studios.katniny.lol/blogs/meowser-rebranding-rebuilt
 - **Developer-Friendly**: Electron provides a familiar JS/HTML/CSS environment, making development easier for us and possible contributors.
 - **Cross-platform**: Easier to maintain across Windows, macOS, and Linux without separate implementations.
 - **Customization**: Allows for a fully custom UI while still leveraging Chromium's rendering power.
+- **More Secure**: See https://x.com/gnukeith/status/1868551096190304629
 ## Rendering Engines for the Future
 While Chromium/Electron is the best choice for Kairo right now, future developments in rendering engines could change that. Some promising options include:
 - **Ladybird**: An independent browser engine making impressive progress on web standards, with a focus on speed and modern web compatibility. If it continues improving, it could be a great alternative.
