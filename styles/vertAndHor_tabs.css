@@ -1,0 +1,66 @@
+body.horizontal-layout {
+    flex-direction: column;
+}
+
+body.horizontal-layout #tabs {
+    order: 1;
+}
+
+body.horizontal-layout .container {
+    order: 2;
+}
+
+body.horizontal-layout #webviewContainer {
+    order: 3;
+}
+
+/* vertical Layout */
+body.vertical-layout {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+body.vertical-layout .container {
+    order: 1;
+    width: 100%;
+}
+
+body.vertical-layout #tabs {
+    order: 2;
+    width: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+body.vertical-layout #webviewContainer {
+    order: 3;
+    flex-grow: 1;
+    width: 50%;
+    height: 97.1%;
+}
+
+/* responsive adjustments */
+@media (max-width: 768px) {
+    body.vertical-layout #tabs,
+    body.vertical-layout #webviewContainer {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* what can be dragged */
+body.horizontal-layout #tabs {
+    -webkit-app-region: drag;
+}
+
+body.horizontal-layout .container {
+    -webkit-app-region: no-drag;
+}
+
+body.vertical-layout #tabs {
+    -webkit-app-region: no-drag;
+}
+
+body.vertical-layout .container {
+    -webkit-app-region: drag;
+}

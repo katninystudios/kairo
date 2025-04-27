@@ -2,7 +2,7 @@
 > Kairo is in very early development. Information you may find in our READMEs and other files/pages may contain inaccurate information for the time being, however when Kairo is full ready for production, these **WILL** be accurate.
 
 <div align="center">
-  <img src="https://github.com/katninystudios/kairo/blob/main/2_nobg.png">
+  <img src="/branding/full_nobg.png">
   
   The best, fastest, most private way to browse the web.
 </div>

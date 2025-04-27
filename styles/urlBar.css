@@ -1,0 +1,12 @@
+#urlBar {
+    width: 60%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    -webkit-app-region: no-drag;
+}

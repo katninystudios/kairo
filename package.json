@@ -1,0 +1,22 @@
+{
+  "name": "kairo",
+  "version": "1.0.0",
+  "description": "A privacy-first, no-BS browser.",
+  "main": "app/app.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/katninystudios/kairo.git"
+  },
+  "author": "Katniny Studios",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/katninystudios/kairo/issues"
+  },
+  "homepage": "https://github.com/katninystudios/kairo#readme",
+  "dependencies": {
+    "electron": "^35.0.3"
+  }
+}
