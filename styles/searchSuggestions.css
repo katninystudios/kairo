@@ -1,0 +1,30 @@
+#searchSuggestions {
+    position: fixed;
+    width: 60%;
+    max-width: 1000px;
+    background: #f0f0f0;
+    margin: 0 auto;
+    user-select: none;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#searchSuggestions .suggestion {
+    padding: 10px;
+    width: 100%;
+    background: #f0f0f0;
+    z-index: 1;
+}
+
+#searchSuggestions .suggestion:hover {
+    background: #ababab;
+}
+
+#searchSuggestions .suggestion.active {
+    background: #ababab;
+}
+
+#searchSuggestions .suggestion:last-child {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}

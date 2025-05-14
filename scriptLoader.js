@@ -15,9 +15,11 @@ function loadScript(src, async) {
 
 async function loadAllScripts() {
     try {
-        // initialization
         await loadScript("tabs/tabs.js", false);
         await loadScript("tabs/parseUrl.js", false);
+        await loadScript("tabs/sendToUrl.js", false);
+        await loadScript("urls/validate.js", false);
+        await loadScript("urlBar/suggestions.js", false);
 
         // finished!
         console.log("Scripts loaded successfully.");

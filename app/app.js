@@ -11,7 +11,7 @@ function createWindow() {
             webviewTag: true,
             sandbox: true,
             nodeIntegration: true,
-            contextIsolation: true,
+            //contextIsolation: true,
         },
         titleBarStyle: "hidden",
         titleBarOverlay: true,
