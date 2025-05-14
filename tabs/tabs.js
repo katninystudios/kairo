@@ -44,7 +44,7 @@ function createTab(switchTo, type) {
     `;
 
     const tabTitle = document.createElement("span");
-    tabTitle.textContent = "Fetching...";
+    tabTitle.textContent = "Loading...";
     tabTitle.classList.add("title");
     tab.appendChild(tabTitle);
     
