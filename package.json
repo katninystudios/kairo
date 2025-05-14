@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/katninystudios/kairo#readme",
   "dependencies": {
-    "electron": "^35.0.3"
+    "electron": "^36.2.0"
   }
 }
