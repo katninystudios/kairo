@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require("electron");
 const path = require("node:path");
 
+// expose kairo API
 contextBridge.exposeInMainWorld('api', {
     dirname: () => __dirname,
     send: (channel, data) => {
@@ -22,4 +23,13 @@ contextBridge.exposeInMainWorld('api', {
             ipcRenderer.on(channel, (event, ...args) => callback(...args));
         }
     }
+});
+
+// detect when a link is hovered
+contextBridge.exposeInMainWorld("link", {
+    sendLinkHover: (href) => ipcRenderer.send("link-hover", href),
+    sendLinkUnhover: () => ipcRenderer.send("link-unhover"),
+    on: (channel, callback) => {
+        ipcRenderer.on(channel, (event, ...args) => callback(...args));
+    },
 });

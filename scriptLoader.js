@@ -21,6 +21,7 @@ async function loadAllScripts() {
         await loadScript("tabs/sendToUrl.js", false);
         await loadScript("urls/validate.js", false);
         await loadScript("urlBar/suggestions.js", false);
+        await loadScript("ui/showHoveredLinks.js", false);
 
         // finished!
         console.log("Scripts loaded successfully.");

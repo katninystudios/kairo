@@ -1,4 +1,4 @@
-const { app, BrowserWindow, session, crashReporter } = require("electron");
+const { app, BrowserWindow, session, ipcMain } = require("electron");
 const path = require("node:path");
 const { platform } = require("node:process"); 
 
@@ -69,4 +69,15 @@ app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
         app.quit();
     }
+});
+
+// link hover
+ipcMain.on("link-hover", (event, href) => {
+    console.log("Hovered over link: ", href);
+    event.sender.send("update-hovered-link", href);
+});
+
+ipcMain.on("link-unhover", (event) => {
+    console.log("Link hover ended");
+    event.sender.send("clear-hovered-link");
 });

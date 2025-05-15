@@ -18,6 +18,7 @@ function createTab(switchTo, type, url) {
     }
     webview.setAttribute("allowpopups", "");
     webview.setAttribute("view", current);
+    webview.setAttribute("preload", "ui/webviewPreload.js");
     webview.classList.add("hidden");
 
     // if switch to, then hide the current webview
@@ -157,6 +158,23 @@ function createTab(switchTo, type, url) {
     webview.addEventListener("did-navigate", () => {
         if (webview.classList.contains("visible")) {
             parseURL(webview.getURL());
+        }
+    });
+
+    // detect when a link is hovered
+    let clearTextTimeout;
+    webview.addEventListener("ipc-message", (event) => {
+        const linkStatus = document.getElementById("linkStatus");
+
+        if (event.channel === "link-hover" && linkStatus) {
+            clearTimeout(clearTextTimeout);
+            linkStatus.textContent = event.args[0];
+            linkStatus.style.opacity = "1";
+        } else if (event.channel === "link-unhover" && linkStatus) {
+            linkStatus.style.opacity = "0";
+            clearTextTimeout = setTimeout(() => {
+                linkStatus.textContent = "";
+            }, 500);
         }
     });
 }
