@@ -34,6 +34,11 @@ function createTab(switchTo, type, url) {
         visibleWebview.forEach(webview => {
             webview.classList.add("hidden");
             webview.classList.remove("visible");
+
+            // get the tab that it belongs to
+            const viewId = webview.getAttribute("view");
+            const matchingTab = document.querySelector(`.tab[associated-with-view="${viewId}"]`);
+            matchingTab.classList.remove("active");
         });
     }
 
@@ -43,6 +48,9 @@ function createTab(switchTo, type, url) {
     // now, create tab
     const tab = document.createElement("div");
     tab.classList.add("tab");
+    if (switchTo) {
+        tab.classList.add("active");
+    }
     tab.setAttribute("associated-with-view", current);
     tab.innerHTML = `
         <p><span id="favicon-for-tab-${current}" class="favicon"> <i class="bi bi-globe-americas"></i> </span> <span id="audio-playing-from-tab-${current}" class="audioIcon" style="display: none; font-size: larger;"> <i class="bi bi-volume-up-fill"></i> </span></p>
@@ -66,7 +74,14 @@ function createTab(switchTo, type, url) {
         visibleWebview.forEach(webview => {
             webview.classList.add("hidden");
             webview.classList.remove("visible");
+
+            // get the tab that it belongs to
+            const viewId = webview.getAttribute("view");
+            const matchingTab = document.querySelector(`.tab[associated-with-view="${viewId}"]`);
+            matchingTab.classList.remove("active");
         });
+
+        tab.classList.add("active");
 
         // change URL to current webviews
         parseURL(webview.getURL());
