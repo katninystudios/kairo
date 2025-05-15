@@ -1,0 +1,17 @@
+:root {
+    --container-bg: #f0f0f0;
+    --link-status-bg: #f0f0f0;
+    --search-suggestions-bg: #f0f0f0;
+    --suggestion-bg: #f0f0f0;
+    --suggestion-bg-hover: #ababab;
+    --suggestion-active-bg: #ababab;
+    --tabs-bg: #f0f0f0;
+    --tabs-border-bottom: #d3d3d3;
+    --url-bar-border: #ccc;
+    --tab-bg: white;
+    --protocol-color: gray;
+    --subdomain-color: gray;
+    --subdomain-www-color: black;
+    --domain-color: black;
+    --trailing-color: gray;
+}

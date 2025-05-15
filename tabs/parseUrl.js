@@ -15,30 +15,30 @@ function parseURL(url) {
 
     const protocolElement = document.createElement("span");
     protocolElement.textContent = protocol + "//";
-    protocolElement.style.color = "gray";
+    protocolElement.style.color = "var(--protocol-color)";
     urlElement.appendChild(protocolElement);
 
     // add subdomain part (only if it exists and is not the main domain)
     if (subdomain && subdomain !== "www") {
         const subdomainElement = document.createElement("span");
         subdomainElement.textContent = subdomain + ".";
-        subdomainElement.style.color = "gray";
+        subdomainElement.style.color = "var(--subdomain-color)";
         urlElement.appendChild(subdomainElement);
     } else if (subdomain === "www") {
         const wwwElement = document.createElement("span");
         wwwElement.textContent = subdomain + ".";
-        wwwElement.style.color = "black";
+        wwwElement.style.color = "var(--subdomain-www-color)";
         urlElement.appendChild(wwwElement);
     }
 
     const domainElement = document.createElement("span");
     domainElement.textContent = domain;
-    domainElement.style.color = "black";
+    domainElement.style.color = "var(--domain-color)";
     urlElement.appendChild(domainElement);
 
     const trailingElement = document.createElement("span");
     trailingElement.textContent = trailing;
-    trailingElement.style.color = "gray";
+    trailingElement.style.color = "var(--trailing-color)";
     urlElement.appendChild(trailingElement);
 
     // append the styled URL

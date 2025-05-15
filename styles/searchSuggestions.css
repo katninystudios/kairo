@@ -2,7 +2,7 @@
     position: fixed;
     width: 60%;
     max-width: 1000px;
-    background: #f0f0f0;
+    background: var(--search-suggestions-bg);
     margin: 0 auto;
     user-select: none;
     left: 50%;
@@ -12,16 +12,16 @@
 #searchSuggestions .suggestion {
     padding: 10px;
     width: 100%;
-    background: #f0f0f0;
+    background: var(--suggestion-bg);
     z-index: 1;
 }
 
 #searchSuggestions .suggestion:hover {
-    background: #ababab;
+    background: var(--suggestion-bg-hover);
 }
 
 #searchSuggestions .suggestion.active {
-    background: #ababab;
+    background: var(--suggestion-active-bg);
 }
 
 #searchSuggestions .suggestion:last-child {

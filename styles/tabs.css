@@ -2,11 +2,10 @@
     display: flex;
     overflow: auto;
     white-space: nowrap;
-    background-color: #dadada;
-    border-bottom: 1px solid #d3d3d3;
+    border-bottom: 1px solid var(--tabs-border-bottom);
     padding: 4px 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    background: #f0f0f0;
+    background: var(--tabs-bg);
 }
 
 .tab {
@@ -14,7 +13,7 @@
     align-items: center;
     margin-right: 10px;
     flex-shrink: 0;
-    background: white;
+    background: var(--tab-bg);
     padding: 8px;
     border-radius: 5px;
     height: 20px;
