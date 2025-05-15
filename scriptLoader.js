@@ -15,6 +15,7 @@ function loadScript(src, async) {
 
 async function loadAllScripts() {
     try {
+        await loadScript("tabs/newTabRequested.js", false);
         await loadScript("tabs/tabs.js", false);
         await loadScript("tabs/parseUrl.js", false);
         await loadScript("tabs/sendToUrl.js", false);

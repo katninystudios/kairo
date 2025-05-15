@@ -1,4 +1,4 @@
-const { app, BrowserWindow, session } = require("electron");
+const { app, BrowserWindow, session, crashReporter } = require("electron");
 const path = require("node:path");
 const { platform } = require("node:process"); 
 
@@ -8,8 +8,9 @@ function createWindow() {
         width: 800,
         height: 600,
         webPreferences: {
+            preload: __dirname + "/preload.js",
             webviewTag: true,
-            sandbox: true,
+            //sandbox: true,
             nodeIntegration: true,
             //contextIsolation: true,
         },
@@ -19,6 +20,21 @@ function createWindow() {
             color: "#fff",
             symbolColor: "#000"
         }
+    });
+
+    // open new tab/window, instead of always opening popup
+    win.webContents.on("did-attach-webview", (_, contents) => {
+        contents.setWindowOpenHandler((details) => {
+            console.log(details.disposition);
+            if (details.disposition === "new-window") {
+                // this is a popup
+                return { action: "allow" };
+            } else {
+                // should be a tab
+                win.webContents.send("open-url", details.url);
+                return { action: "deny" };
+            }
+        });
     });
 
     // then, load!
@@ -39,6 +55,7 @@ app.whenReady().then(() => {
         app.userAgentFallback = `Mozilla/5.0 (Unsupported; Unknown Operating System) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${process.versions.chrome} Safari/537.36 Kairo/${process.versions.electron}`;
     }
 
+    // then, create window
     createWindow();
 
     app.on("activate", () => {

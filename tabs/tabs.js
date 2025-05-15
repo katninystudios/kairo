@@ -1,7 +1,7 @@
 let tabs = 0; // keep count of tabs, used to associate webviews with tabs
 
 // this is where all the tabs logic is
-function createTab(switchTo, type) {
+function createTab(switchTo, type, url) {
     // increment, then keep track
     tabs++;
     const current = tabs;
@@ -11,7 +11,11 @@ function createTab(switchTo, type) {
 
     // create webview
     const webview = document.createElement("webview");
-    webview.setAttribute("src", "https://start.duckduckgo.com/");
+    if (url) {
+        webview.setAttribute("src", url);
+    } else {
+        webview.setAttribute("src", "https://start.duckduckgo.com/");
+    }
     webview.setAttribute("allowpopups", "");
     webview.setAttribute("view", current);
     webview.classList.add("hidden");
