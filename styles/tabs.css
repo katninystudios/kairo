@@ -25,6 +25,7 @@
     -webkit-app-region: no-drag;
     opacity: 0.5;
     transition: all 0.15s ease;
+    font-size: 14px;
 }
 
 .tab:hover {
@@ -62,4 +63,5 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-bottom: 2px;
 }
