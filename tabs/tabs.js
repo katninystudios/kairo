@@ -19,7 +19,7 @@ function createTab(switchTo, type, url) {
     webview.setAttribute("allowpopups", "");
     webview.setAttribute("view", current);
     webview.setAttribute("preload", "ui/webviewPreload.js");
-    webview.classList.add("hidden");
+    webview.classList.add("hidden");  
 
     // if switch to, then hide the current webview
     // and mark this one as the one to switch to
