@@ -25,13 +25,12 @@ function createWindow() {
     // open new tab/window, instead of always opening popup
     win.webContents.on("did-attach-webview", (_, contents) => {
         contents.setWindowOpenHandler((details) => {
-            console.log(details.disposition);
             if (details.disposition === "new-window") {
                 // this is a popup
                 return { action: "allow" };
             } else {
                 // should be a tab
-                win.webContents.send("open-url", details.url);
+                win.webContents.send("open-url", details.disposition, details.url);
                 return { action: "deny" };
             }
         });
