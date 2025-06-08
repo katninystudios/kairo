@@ -38,6 +38,11 @@ document.getElementById("urlBar").addEventListener("input", () => {
                 const suggestions = data[1];
 
                 suggestions.forEach((suggestion, index) => {
+                    // make sure its not the same as the query
+                    if (suggestion === attemptedQuery) {
+                        return;
+                    }
+
                     // create & add text/class
                     const suggestDiv = document.createElement("div");
                     suggestDiv.innerHTML = `<i class="bi bi-search"></i> ${suggestion}`;
