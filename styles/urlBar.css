@@ -9,4 +9,9 @@
     white-space: nowrap;
     overflow: hidden;
     -webkit-app-region: no-drag;
+    outline: none;
+}
+
+#urlBar:focus span {
+    color: var(--domain-color) !important;
 }
