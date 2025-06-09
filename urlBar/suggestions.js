@@ -1,65 +1,107 @@
-document.getElementById("urlBar").addEventListener("input", () => {
-    // get the query
-    const attemptedQuery = document.getElementById("urlBar").innerText;
+let selectedIndex = 0;
+let suggestionsData = [];
 
-    if (attemptedQuery.trim() !== "") {
-        // fetch search suggestions from DuckDuckGo
+const urlBar = document.getElementById("urlBar");
+const suggestionsContainer = document.getElementById("searchSuggestions");
+
+urlBar.addEventListener("input", () => {
+    const attemptedQuery = urlBar.innerText.trim();
+    selectedIndex = 0;
+    highlightSelection(suggestionsContainer.querySelectorAll(".suggestion"), false);
+
+    if (attemptedQuery !== "") {
         fetch(`https://duckduckgo.com/ac/?q=${attemptedQuery}&type=list`)
             .then(response => response.json())
             .then(data => {
-                // clear current suggestions (and display if hidden)
-                document.getElementById("searchSuggestions").innerHTML = "";
-                document.getElementById("searchSuggestions").style.display = "block";
+                suggestionsContainer.innerHTML = "";
+                suggestionsContainer.style.display = "block";
 
-                // show current text
-                const suggestDiv = document.createElement("div");
-                const isLink = isUrl(attemptedQuery);
-                if (isLink) {
-                    suggestDiv.innerHTML = `<i class="bi bi-globe-americas"></i> ${attemptedQuery}`;
-                    suggestDiv.addEventListener("click", () => {
-                        if (!attemptedQuery.startsWith("http") && !attemptedQuery.startsWith("https")) {
-                            sendToURL(`https://${attemptedQuery}`);
-                        } else {
-                            sendToURL(attemptedQuery);
-                        }
-                        document.getElementById("searchSuggestions").style.display = "none";
-                    });
-                } else {
-                    suggestDiv.innerHTML = `<i class="bi bi-search"></i> ${attemptedQuery} - DuckDuckGo Search`;
-                    suggestDiv.addEventListener("click", () => {
-                        sendToURL(`https://duckduckgo.com/search?q=${attemptedQuery}`);
-                        document.getElementById("searchSuggestions").style.display = "none";
-                    });
-                }
-                suggestDiv.classList.add("suggestion");
-                document.getElementById("searchSuggestions").appendChild(suggestDiv);
+                suggestionsData = [attemptedQuery, ...data[1].filter(s => s !== attemptedQuery)];
 
-                // then show results
-                const suggestions = data[1];
+                suggestionsData.forEach((suggestion, index) => {
+                    const div = document.createElement("div");
+                    const isLink = isUrl(suggestion);
 
-                suggestions.forEach((suggestion, index) => {
-                    // make sure its not the same as the query
-                    if (suggestion === attemptedQuery) {
-                        return;
+                    if (index === 0) {
+                        div.innerHTML = isLink
+                            ? `<i class="bi bi-globe-americas"></i> ${suggestion}`
+                            : `<i class="bi bi-search"></i> ${suggestion} - DuckDuckGo Search`;
+                    } else {
+                        div.innerHTML = `<i class="bi bi-search"></i> ${suggestion}`;
                     }
 
-                    // create & add text/class
-                    const suggestDiv = document.createElement("div");
-                    suggestDiv.innerHTML = `<i class="bi bi-search"></i> ${suggestion}`;
-                    suggestDiv.className = "suggestion";
-                    suggestDiv.addEventListener("click", () => {
-                        sendToURL(`https://duckduckgo.com/search?q=${suggestion}`);
-                        document.getElementById("searchSuggestions").style.display = "none";
-                    });
-
-                    // then add to search suggestions
-                    document.getElementById("searchSuggestions").appendChild(suggestDiv);
-                });
+                    div.className = "suggestion";
+                    div.dataset.index = index;
+                    div.addEventListener("click", () => {
+                        sendSuggestion(index);
+                        suggestionsContainer.style.display = "none";
+                    })
+                    suggestionsContainer.appendChild(div);
+                })
             })
-            .catch(error => {
-                console.error("Error fetching data:", error);
-            });
+            .catch(err => console.error("Error fetching suggestions:", err));
     } else {
-        document.getElementById("searchSuggestions").style.display = "none";
+        suggestionsContainer.style.display = "none";
     }
-});
+})
+
+// key navigation
+urlBar.addEventListener("keydown", (e) => {
+    const items = suggestionsContainer.querySelectorAll(".suggestion");
+
+    if (suggestionsContainer.style.display === "block" && items.length > 0) {
+        if (e.key === "ArrowDown") {
+            e.preventDefault();
+            selectedIndex = (selectedIndex + 1) % items.length;
+            highlightSelection(items, true);
+            placeCaretAtEnd(urlBar);
+        } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+            highlightSelection(items, true);
+            placeCaretAtEnd(urlBar);
+        } else if (e.key === "Enter" && selectedIndex >= 0) {
+            e.preventDefault();
+            sendSuggestion(selectedIndex);
+            urlBar.blur();
+            suggestionsContainer.style.display = "none";
+        }
+    }
+})
+
+// helper: update highlight + urlBar text
+function highlightSelection(items, setInnerText) {
+    // select item
+    items.forEach((item, idx) => {
+        if (idx === selectedIndex) {
+            item.classList.add("selected");
+            if (setInnerText) urlBar.innerText = suggestionsData[selectedIndex];
+        } else {
+            item.classList.remove("selected");
+        }
+    });
+}
+
+// helper: simulate clicking suggestion
+function sendSuggestion(index) {
+    const suggestion = suggestionsData[index];
+    if (isUrl(suggestion)) {
+        const fixed = suggestion.startsWith("http") ? suggestion : `https://${suggestion}`;
+        sendToURL(fixed);
+    } else {
+        sendToURL(`https://duckduckgo.com/search?q=${suggestion}`);
+    }
+}
+
+// helper: keep caret at end when updating text
+function placeCaretAtEnd(el) {
+    el.focus()
+    if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
+        const range = document.createRange()
+        range.selectNodeContents(el)
+        range.collapse(false)
+        const sel = window.getSelection()
+        sel.removeAllRanges()
+        sel.addRange(range)
+    }
+}
