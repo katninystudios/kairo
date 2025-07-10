@@ -1,6 +1,7 @@
 const { app, BrowserWindow, session, ipcMain } = require("electron");
 const path = require("node:path");
 const { platform } = require("node:process"); 
+const { ElectronBlocker } = require("@ghostery/adblocker-electron");
 
 function createWindow() {
     // the window itself
@@ -79,4 +80,9 @@ ipcMain.on("link-hover", (event, href) => {
 ipcMain.on("link-unhover", (event) => {
     console.log("Link hover ended");
     event.sender.send("clear-hovered-link");
+});
+
+// enable adblocker
+ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
+    blocker.enableBlockingInSession(session.defaultSession);
 });
