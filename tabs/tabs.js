@@ -53,7 +53,7 @@ function createTab(switchTo, type, url) {
     }
     tab.setAttribute("associated-with-view", current);
     tab.innerHTML = `
-        <p><span id="favicon-for-tab-${current}" class="favicon"> <i class="bi bi-globe-americas"></i> </span> <span id="audio-playing-from-tab-${current}" class="audioIcon" style="display: none; font-size: larger;"> <i class="bi bi-volume-up-fill"></i> </span></p>
+        <p><span id="favicon-for-tab-${current}" class="favicon"> </span> <span id="audio-playing-from-tab-${current}" class="audioIcon" style="display: none; font-size: larger;"> <i class="bi bi-volume-up-fill"></i> </span></p>
     `;
 
     const tabTitle = document.createElement("span");
@@ -113,8 +113,8 @@ function createTab(switchTo, type, url) {
 
     function setFaviconSpinner() {
         const faviconEl = document.getElementById(`favicon-for-tab-${current}`);
-        faviconEl.innerHTML = `<i class="bi bi-arrow-repeat"></i>`;
-        faviconLoaded = false; // reset flag so spinner stays until favicon loads
+        faviconEl.innerHTML = `<div class="faviconSpinner"></div>`;
+        faviconLoaded = false;
     }
 
     webview.addEventListener("will-navigate", () => {
@@ -153,14 +153,14 @@ function createTab(switchTo, type, url) {
                 img.onerror = () => {
                     // fallback only if no favicon has ever loaded
                     if (!faviconLoaded && !lastFaviconUrl) {
-                        faviconEl.innerHTML = `<i class="bi bi-globe-americas"></i>`;
+                        faviconEl.innerHTML = ``;
                     }
                 };
 
                 break; // only try the first new favicon
             }
         } else if (!faviconLoaded && !lastFaviconUrl) {
-            faviconEl.innerHTML = `<i class="bi bi-globe-americas"></i>`;
+            faviconEl.innerHTML = ``;
         }
     });
 

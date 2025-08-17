@@ -51,6 +51,38 @@
     transform: translateY(1px);
 }
 
+.tab .faviconSpinner {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.tab .faviconSpinner::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -30%;
+    width: 50%;
+    height: 4px;
+    background-color: #4a90e2;
+    transform: translateY(-50%);
+    animation: slideBackForth 1s ease-in-out infinite;
+    border-radius: 2px;
+}
+
+@keyframes slideBackForth {
+    0% {
+        left: -30%;
+    }
+    50% {
+        left: 80%;
+    }
+    100% {
+        left: -30%;
+    }
+}
+
 .tab .audioIcon {
     display: inline-flex;
     align-items: center;
