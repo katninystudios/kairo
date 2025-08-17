@@ -108,64 +108,56 @@ function createTab(switchTo, type, url) {
         }, 50);
     }, 50);
 
-    // when the webview starts loading
+    let lastFaviconUrl = null;
+
+    webview.addEventListener("will-navigate", () => {
+        const faviconEl = document.getElementById(`favicon-for-tab-${current}`);
+        faviconEl.innerHTML = `<i class="bi bi-arrow-repeat"></i>`;
+        isNavigating = true;
+    });
+
     webview.addEventListener("did-start-loading", () => {
         if (isNavigating) {
-            document.getElementById(`favicon-for-tab-${current}`).innerHTML = `<i class="bi bi-arrow-repeat"></i>`;
-            //console.log("Is loading!");
+            const faviconEl = document.getElementById(`favicon-for-tab-${current}`);
+            faviconEl.innerHTML = `<i class="bi bi-arrow-repeat"></i>`;
         }
     });
 
-    webview.addEventListener("will-navigate", () => {
-        document.getElementById(`favicon-for-tab-${current}`).innerHTML = `<i class="bi bi-arrow-repeat"></i>`;
-        isNavigating = true;
-        //console.log("Starting navigating...!");
-    })
-
     webview.addEventListener("did-stop-loading", () => {
         isNavigating = false;
-        //console.log("Done navigating!");
-
-        // dispatch event to prevent the loading from sticking
         const event = new Event("page-favicon-updated");
         webview.dispatchEvent(event);
     });
 
-    // when the pages favicon updates
-    webview.addEventListener("page-favicon-updated", async (event) => {
+    webview.addEventListener("page-favicon-updated", (event) => {
+        const faviconEl = document.getElementById(`favicon-for-tab-${current}`);
+
         if (event.favicons && event.favicons.length > 0) {
             for (const faviconUrl of event.favicons) {
-                try {
-                    // attempt to fetch the favicon to validate accessibility
-                    const response = await fetch(faviconUrl, {
-                        method: "HEAD",
-                        mode: "no-cors"
-                    });
+                // skip if it’s the same as last applied
+                if (faviconUrl === lastFaviconUrl) continue;
 
-                    if (!response.ok) {
-                        console.warn(`Favicon not accessible (Status ${response.status}): `, faviconUrl);
-                        document.getElementById(`favicon-for-tab-${current}`).innerHTML = `<i class="bi bi-globe-americas"></i>`;
-                        continue; // skip to the next favicon if this one is problematic
+                const img = new Image();
+                img.src = faviconUrl;
+                img.draggable = false;
+
+                img.onload = () => {
+                    faviconEl.innerHTML = "";
+                    faviconEl.appendChild(img);
+                    lastFaviconUrl = faviconUrl;
+                };
+
+                img.onerror = () => {
+                    // fallback if last favicon failed
+                    if (!lastFaviconUrl) {
+                        faviconEl.innerHTML = `<i class="bi bi-globe-americas"></i>`;
                     }
+                };
 
-                    // additional content type validation
-                    const contentType = response.headers.get("Content-Type");
-
-                    if (!contentType) {
-                        console.warn(`Invalid favicon content type: ${contentType} from ${faviconUrl}`);
-                        document.getElementById(`favicon-for-tab-${current}`).innerHTML = `<i class="bi bi-globe-americas"></i>`;
-                        continue;
-                    }
-
-                    document.getElementById(`favicon-for-tab-${current}`).innerHTML = `<img src="${faviconUrl}" draggable="false" />`;
-                    //console.log("Valid favicon URL: ", faviconUrl);
-                } catch (error) {
-                    console.warn("Error checking favicon: ", faviconUrl, error);
-                    document.getElementById(`favicon-for-tab-${current}`).innerHTML = `<i class="bi bi-globe-americas"></i>`;
-                }
+                break; // only try first valid favicon
             }
-        } else {
-            //console.log("No favicon URLs found");
+        } else if (!lastFaviconUrl) {
+            faviconEl.innerHTML = `<i class="bi bi-globe-americas"></i>`;
         }
     });
 
