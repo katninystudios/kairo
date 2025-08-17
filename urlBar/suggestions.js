@@ -7,37 +7,56 @@ const suggestionsContainer = document.getElementById("searchSuggestions");
 urlBar.addEventListener("input", () => {
     const attemptedQuery = urlBar.innerText.trim();
     selectedIndex = 0;
-    highlightSelection(suggestionsContainer.querySelectorAll(".suggestion"), false);
+    suggestionsContainer.innerHTML = "";
 
     if (attemptedQuery !== "") {
+        suggestionsContainer.style.display = "block";
+
+        // reset suggestions
+        suggestionsData = [];
+
+        // add the immediate "search or url" option
+        const firstDiv = document.createElement("div");
+        const isLink = isUrl(attemptedQuery);
+
+        firstDiv.innerHTML = isLink
+            ? `<i class="bi bi-globe-americas"></i> ${attemptedQuery}`
+            : `<i class="bi bi-search"></i> ${attemptedQuery} - DuckDuckGo Search`;
+
+        firstDiv.className = "suggestion";
+        firstDiv.dataset.index = 0;
+        firstDiv.addEventListener("click", () => {
+            sendSuggestion(0);
+            suggestionsContainer.style.display = "none";
+        });
+
+        suggestionsContainer.appendChild(firstDiv);
+        suggestionsData.push(attemptedQuery);
+
+        // fetch autocomplete
         fetch(`https://duckduckgo.com/ac/?q=${attemptedQuery}&type=list`)
             .then(response => response.json())
             .then(data => {
-                suggestionsContainer.innerHTML = "";
-                suggestionsContainer.style.display = "block";
+                // use a Set to avoid duplicates
+                const seen = new Set(suggestionsData);
 
-                suggestionsData = [attemptedQuery, ...data[1].filter(s => s !== attemptedQuery)];
-
-                suggestionsData.forEach((suggestion, index) => {
-                    const div = document.createElement("div");
-                    const isLink = isUrl(suggestion);
-
-                    if (index === 0) {
-                        div.innerHTML = isLink
-                            ? `<i class="bi bi-globe-americas"></i> ${suggestion}`
-                            : `<i class="bi bi-search"></i> ${suggestion} - DuckDuckGo Search`;
-                    } else {
+                data[1].forEach(suggestion => {
+                    if (!seen.has(suggestion)) {
+                        seen.add(suggestion);
+                        const div = document.createElement("div");
                         div.innerHTML = `<i class="bi bi-search"></i> ${suggestion}`;
-                    }
+                        div.className = "suggestion";
+                        div.dataset.index = suggestionsData.length;
 
-                    div.className = "suggestion";
-                    div.dataset.index = index;
-                    div.addEventListener("click", () => {
-                        sendSuggestion(index);
-                        suggestionsContainer.style.display = "none";
-                    })
-                    suggestionsContainer.appendChild(div);
-                })
+                        div.addEventListener("click", () => {
+                            sendSuggestion(parseInt(div.dataset.index));
+                            suggestionsContainer.style.display = "none";
+                        });
+
+                        suggestionsContainer.appendChild(div);
+                        suggestionsData.push(suggestion);
+                    }
+                });
             })
             .catch(err => console.error("Error fetching suggestions:", err));
     } else {
