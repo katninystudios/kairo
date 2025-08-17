@@ -1,11 +1,11 @@
 #searchSuggestions {
     position: fixed;
-    width: 60%;
+    width: 50%;
     max-width: 1000px;
     background: var(--search-suggestions-bg);
     margin: 0 auto;
     user-select: none;
-    left: 50%;
+    left: 49.5%;
     transform: translateX(-50%);
 }
 
