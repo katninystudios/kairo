@@ -109,18 +109,21 @@ function createTab(switchTo, type, url) {
     }, 50);
 
     let lastFaviconUrl = null;
+    let faviconLoaded = false;
 
-    webview.addEventListener("will-navigate", () => {
+    function setFaviconSpinner() {
         const faviconEl = document.getElementById(`favicon-for-tab-${current}`);
         faviconEl.innerHTML = `<i class="bi bi-arrow-repeat"></i>`;
+        faviconLoaded = false; // reset flag so spinner stays until favicon loads
+    }
+
+    webview.addEventListener("will-navigate", () => {
+        setFaviconSpinner();
         isNavigating = true;
     });
 
     webview.addEventListener("did-start-loading", () => {
-        if (isNavigating) {
-            const faviconEl = document.getElementById(`favicon-for-tab-${current}`);
-            faviconEl.innerHTML = `<i class="bi bi-arrow-repeat"></i>`;
-        }
+        if (isNavigating) setFaviconSpinner();
     });
 
     webview.addEventListener("did-stop-loading", () => {
@@ -134,7 +137,6 @@ function createTab(switchTo, type, url) {
 
         if (event.favicons && event.favicons.length > 0) {
             for (const faviconUrl of event.favicons) {
-                // skip if it’s the same as last applied
                 if (faviconUrl === lastFaviconUrl) continue;
 
                 const img = new Image();
@@ -145,18 +147,19 @@ function createTab(switchTo, type, url) {
                     faviconEl.innerHTML = "";
                     faviconEl.appendChild(img);
                     lastFaviconUrl = faviconUrl;
+                    faviconLoaded = true; // favicon successfully loaded
                 };
 
                 img.onerror = () => {
-                    // fallback if last favicon failed
-                    if (!lastFaviconUrl) {
+                    // fallback only if no favicon has ever loaded
+                    if (!faviconLoaded && !lastFaviconUrl) {
                         faviconEl.innerHTML = `<i class="bi bi-globe-americas"></i>`;
                     }
                 };
 
-                break; // only try first valid favicon
+                break; // only try the first new favicon
             }
-        } else if (!lastFaviconUrl) {
+        } else if (!faviconLoaded && !lastFaviconUrl) {
             faviconEl.innerHTML = `<i class="bi bi-globe-americas"></i>`;
         }
     });
