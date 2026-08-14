@@ -3,6 +3,9 @@ Kairo is being rebuilt on top of Ungoogled Chromium, rather than Electron. This 
 
 We hope to share more with you soon.
 
+
+---
+
 > [!CAUTION]
 > Kairo is in very early development. Information you may find in our READMEs and other files/pages may contain inaccurate information for the time being, however when Kairo is full ready for production, these **WILL** be accurate.
 
